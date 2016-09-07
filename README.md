@@ -1,2 +1,2 @@
-# php5_fpm
-PHP 5 FPM mode
+# php7_fpm
+PHP 7 FPM mode
