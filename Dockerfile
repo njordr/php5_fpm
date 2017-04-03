@@ -26,11 +26,12 @@ RUN apt-get update && apt-get install -y \
         libjpeg-turbo8-dev \
         libmcrypt-dev \
         libpng12-dev \
+        libgmp-dev \
     --no-install-recommends && rm -r /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
 
-RUN mkdir -p $PHP_INI_DIR/conf.d
+RUN mkdir -p $PHP_INI_DIR/conf.d && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
 # ENV GPG_KEYS 0BD78B5F97500D450838F95DFE857D9A90D90EC1 6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3
 
@@ -65,6 +66,8 @@ RUN cd /usr/src \
         --with-freetype-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \
         --enable-zip \
+        --enable-intl \
+        --with-gmp \
         --with-mcrypt \
     && make  \
     && make install \
