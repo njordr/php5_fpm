@@ -38,6 +38,13 @@ RUN mkdir -p $PHP_INI_DIR/conf.d && ln -s /usr/include/x86_64-linux-gnu/gmp.h /u
 # ENV PHP_VERSION 5.6.25
 # ENV PHP_FILENAME php-5.6.25.tar.gz
 # ENV PHP_SHA256 7535cd6e20040ccec4594cc386c6f15c3f2c88f24163294a31068cf7dfe7f644
+#
+COPY src/icu4c-59rc-src.tgz /tmp/icu4c-59rc-src.tgz
+RUN cd /tmp \
+    && tar xfz icu4c-59rc-src.tgz \
+    && cd icu/source && ./configure --prefix=/opt/icu && make && make install \
+    && cd /tmp \
+    && rm -Rf icu*
 
 COPY src/php.tar.gz /usr/src/php.tar.gz
 
@@ -69,6 +76,7 @@ RUN cd /usr/src \
         --enable-intl \
         --with-gmp \
         --with-mcrypt \
+        --with-icu-dir=/opt/icu \
     && make  \
     && make install \
     && cp -f php.ini-production $PHP_INI_DIR/php.ini \
